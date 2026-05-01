@@ -1,0 +1,37 @@
+# Environment & secrets
+.env
+
+# Database (generated locally)
+retail.db
+
+# Raw data files (user downloads from Kaggle)
+data/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Package build artifacts
+*.egg-info/
+dist/
+build/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/

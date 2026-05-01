@@ -1,0 +1,7 @@
+prophet
+streamlit
+anthropic
+pandas
+plotly
+python-dotenv
+numpy
