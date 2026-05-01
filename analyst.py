@@ -9,7 +9,18 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
-_API_KEY = os.getenv("ANTHROPIC_API_KEY", "").strip()
+# On Streamlit Cloud secrets live in st.secrets, not env vars
+def _resolve_key() -> str:
+    key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+    if not key:
+        try:
+            import streamlit as st
+            key = st.secrets.get("ANTHROPIC_API_KEY", "").strip()
+        except Exception:
+            pass
+    return key
+
+_API_KEY = _resolve_key()
 AI_AVAILABLE = bool(_API_KEY)
 
 _FALLBACK = (
