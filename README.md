@@ -1,59 +1,127 @@
-# RetailSense — AI-Powered Retail Demand Forecasting
+<div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python)
-![Prophet](https://img.shields.io/badge/Prophet-Meta-orange?style=flat-square)
-![Claude AI](https://img.shields.io/badge/Claude_AI-Optional-8b5cf6?style=flat-square)
-![Streamlit](https://img.shields.io/badge/Streamlit-Web_App-ff4b4b?style=flat-square&logo=streamlit)
-![Rossmann Data](https://img.shields.io/badge/Data-Rossmann_Kaggle-20b2aa?style=flat-square)
+# RetailSense
 
-> A demand forecasting web app that combines Facebook Prophet time series models with Claude AI to generate analyst-grade narrative insights from real Rossmann retail sales data.
+### AI-Powered Retail Demand Forecasting
 
----
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io)
+[![Prophet](https://img.shields.io/badge/Prophet-Meta-0064E0?style=for-the-badge)](https://facebook.github.io/prophet/)
+[![Claude AI](https://img.shields.io/badge/Claude_AI-Anthropic-8B5CF6?style=for-the-badge)](https://anthropic.com)
+[![License](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge)](LICENSE)
 
-## What It Does
+**[🚀 Live Demo](https://retailsense-kkjkdpqxwnmc98smxrfcol.streamlit.app)** · **[Report Bug](https://github.com/krishnanhamsavi/RetailSense/issues)** · **[Request Feature](https://github.com/krishnanhamsavi/RetailSense/issues)**
 
-RetailSense ingests real-world Rossmann store sales data, aggregates it to weekly granularity, and fits a Prophet model to generate 12-week demand forecasts per store. It automatically detects historical anomalies — weeks where actual sales deviated meaningfully from expected — and surfaces them with visual callouts. When an Anthropic API key is provided, the Claude AI layer writes analyst-grade narrative summaries and anomaly explanations exactly as a senior merchandising analyst would present them to a VP.
-
----
-
-## Live Demo
-
-Run locally — see setup below.
+</div>
 
 ---
 
-## Screenshots
+## What Is RetailSense?
 
-> Add screenshots after running: sidebar with store selector, forecast chart with confidence band, anomaly expanders, and AI analyst card.
+RetailSense is a demand forecasting web application that combines **Facebook Prophet** time series models with **Claude AI** to generate analyst-grade narrative insights from real retail sales data.
+
+A user selects any store, clicks Run Forecast, and gets back:
+- A 12-week demand forecast with confidence intervals
+- Automatic detection of anomalous historical weeks
+- A plain-English analyst summary written like a senior merchandising analyst
+- A store-by-store performance comparison across 20 locations
+
+Built on the real **Rossmann Store Sales** dataset from Kaggle — 1M+ rows of daily European pharmacy retail data.
+
+---
+
+## Demo
+
+> Live app: **https://retailsense-kkjkdpqxwnmc98smxrfcol.streamlit.app**
+
+| Store Forecast | Store Comparison |
+|---|---|
+| Prophet model with confidence band, anomaly detection, AI narrative | All 20 stores ranked by avg weekly sales with AI comparison |
+
+---
+
+## Features
+
+- **Time Series Forecasting** — Facebook Prophet with promotion and holiday regressors, yearly seasonality, and configurable forecast horizon (4–26 weeks)
+- **Anomaly Detection** — Flags historical weeks where actual sales deviated >30% from model expectation
+- **AI Analyst Narratives** — Claude AI writes executive-level summaries, anomaly explanations, and store comparison reports
+- **Free Mode** — Full forecasting and visualisation works with zero API key. AI layer is a pure enhancement
+- **Interactive Charts** — Plotly charts with actual vs forecast overlay, confidence band shading, and anomaly scatter markers
+- **Store Comparison Tab** — Lightweight performance overview across all 20 stores with bar chart by store type
+- **Dark UI** — Custom CSS with metric cards, analyst card with blue border accent, anomaly expanders
 
 ---
 
 ## Tech Stack
 
-| Tool | Purpose |
-|------|---------|
-| **Python 3.10+** | Core language |
-| **Facebook Prophet** | Weekly time series forecasting |
-| **SQLite** | Lightweight local data storage |
-| **Anthropic Claude API** | AI analyst narratives (optional) |
-| **Streamlit** | Interactive web UI |
-| **Plotly** | Interactive charts |
-| **Pandas** | Data wrangling |
-| **python-dotenv** | Environment variable management |
+| Layer | Tool | Purpose |
+|---|---|---|
+| **Frontend** | Streamlit | Interactive web UI |
+| **Forecasting** | Facebook Prophet | Weekly time series model |
+| **AI** | Anthropic Claude API | Analyst narrative generation |
+| **Data Storage** | SQLite | Local processed data cache |
+| **Visualisation** | Plotly | Interactive charts |
+| **Data Processing** | Pandas + NumPy | ETL and aggregation |
+| **Environment** | python-dotenv | Secret management |
 
 ---
 
-## Setup Instructions
+## Architecture
 
-### Step 1 — Clone the repository
+```
+RetailSense/
+│
+├── app.py               ← Streamlit UI — layout, charts, tabs
+├── data_loader.py       ← ETL: raw CSVs → weekly SQLite aggregates
+├── forecaster.py        ← Prophet model + anomaly detection logic
+├── analyst.py           ← Claude AI narrative layer (with free fallback)
+├── generate_demo_data.py← Synthetic data generator for live demo
+│
+├── demo_data/           ← Synthetic Rossmann-style data (committed)
+│   ├── train.csv
+│   └── store.csv
+│
+├── data/                ← Real Kaggle data goes here (git-ignored)
+│   ├── train.csv
+│   └── store.csv
+│
+├── .env.example         ← Environment variable template
+├── .gitignore
+├── requirements.txt
+└── README.md
+```
 
+**Data flow:**
+```
+train.csv + store.csv
+        ↓
+  data_loader.py   →   retail.db (SQLite)
+        ↓
+  forecaster.py    →   Prophet model + anomaly list + summary stats
+        ↓
+   analyst.py      →   Claude AI narratives (or fallback strings)
+        ↓
+    app.py         →   Streamlit UI rendered in browser
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.10 or higher
+- pip or conda
+
+### Installation
+
+**1. Clone the repository**
 ```bash
-git clone https://github.com/YOUR_USERNAME/RetailSense.git
+git clone https://github.com/krishnanhamsavi/RetailSense.git
 cd RetailSense
 ```
 
-### Step 2 — Create and activate a virtual environment
-
+**2. Create and activate a virtual environment**
 ```bash
 # macOS / Linux
 python -m venv venv
@@ -64,148 +132,134 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-### Step 3 — Install dependencies
-
+**3. Install dependencies**
 ```bash
 pip install -r requirements.txt
 ```
 
-> **Prophet installation note** — see the [troubleshooting section](#prophet-installation-notes) below if you hit errors.
-
-### Step 4 — Download the Rossmann dataset
-
-1. Go to [kaggle.com/c/rossmann-store-sales/data](https://www.kaggle.com/c/rossmann-store-sales/data)
-2. Download `train.csv` and `store.csv`
-3. Place both files inside the `/data` folder:
-
-```
-RetailSense/
-└── data/
-    ├── train.csv
-    └── store.csv
-```
-
-### Step 5 — Add your API key (optional)
-
+**4. Add your API key (optional)**
 ```bash
 cp .env.example .env
+# Edit .env and add your ANTHROPIC_API_KEY
 ```
 
-Edit `.env` and paste your Anthropic API key:
+**5. Load the database**
 
-```
-ANTHROPIC_API_KEY=sk-ant-...
-```
-
-Leave this blank to run in free mode — all forecasting still works, only AI narratives are disabled.
-
-### Step 6 — Load the database
-
+*Option A — Use synthetic demo data (no downloads needed):*
 ```bash
 python data_loader.py
 ```
 
-You should see: `Database loaded: X rows across 20 stores.`
+*Option B — Use real Rossmann data:*
+- Download `train.csv` and `store.csv` from [Kaggle](https://www.kaggle.com/c/rossmann-store-sales/data)
+- Place both files in the `/data` folder
+- Run `python data_loader.py`
 
-### Step 7 — Launch the app
-
+**6. Launch the app**
 ```bash
 streamlit run app.py
 ```
 
-Open [http://localhost:8501](http://localhost:8501) in your browser.
+Open **http://localhost:8501** in your browser.
 
 ---
 
 ## Free Mode vs AI Mode
 
 | Feature | Free Mode | AI Mode |
-|---------|-----------|---------|
+|---|:---:|:---:|
 | Prophet forecasting | ✅ | ✅ |
 | Interactive Plotly charts | ✅ | ✅ |
 | Anomaly detection | ✅ | ✅ |
 | Store comparison table | ✅ | ✅ |
 | AI forecast narrative | ❌ | ✅ |
 | AI anomaly explanations | ❌ | ✅ |
-| AI store comparison paragraph | ❌ | ✅ |
+| AI store comparison summary | ❌ | ✅ |
 
-**Free mode is fully functional** — you get the complete forecasting engine, charts, and anomaly detection. The AI layer is a pure enhancement layer.
-
----
-
-## What Makes This Different
-
-- **Real production data** — Uses the actual Rossmann Kaggle dataset (1M+ rows), not synthetic CSVs
-- **Production-grade forecasting model** — Facebook Prophet with custom regressors (promo flags, holiday flags) and automatic anomaly detection
-- **AI narrative layer** — Claude generates analyst-grade summaries written for executive audiences, not technical users
-- **Analyst-style output** — Every insight is framed as a business observation, not a model output — the kind of commentary a senior analyst would send to a VP
+Free mode is fully functional. Add an `ANTHROPIC_API_KEY` to unlock the analyst layer.
 
 ---
 
-## Example Questions This App Answers
+## Forecasting Model
 
-1. *Which weeks should Store 5 increase inventory ahead of forecast demand spikes?*
-2. *Did promotions meaningfully lift sales for Type B stores in 2014?*
-3. *Which store type has the strongest average weekly sales trajectory?*
-4. *Are there anomalous weeks in Store 12's history that warrant an ops review?*
-5. *How does Store 3's forecast compare to its historical average?*
+The Prophet model is configured with:
+
+```python
+Prophet(
+    yearly_seasonality=True,
+    weekly_seasonality=False,
+    daily_seasonality=False,
+    changepoint_prior_scale=0.05,
+)
+```
+
+Two external regressors are added:
+- `had_promo` — binary flag for promotion weeks
+- `had_holiday` — binary flag for state holiday weeks
+
+**Anomaly detection** compares each historical week's actual sales to the model's in-sample prediction. Weeks with >30% deviation are flagged and surfaced in the UI with individual AI explanations.
 
 ---
 
 ## Prophet Installation Notes
 
-**Windows:** If `pip install prophet` fails, try:
+**Windows — if `pip install prophet` fails:**
 ```bash
-pip install pystan==2.19.1.1
-pip install prophet
-```
-
-Or use conda:
-```bash
+# Option A (recommended):
 conda install -c conda-forge prophet
+
+# Option B:
+pip install pystan==2.19.1.1 && pip install prophet
 ```
 
-**Mac (Apple Silicon / M1/M2):** If you see a compiler error:
+**Mac (Apple Silicon M1/M2):**
 ```bash
 brew install gcc
 pip install prophet
 ```
 
-If that still fails:
-```bash
-conda install -c conda-forge prophet
-```
+---
+
+## Example Questions This App Answers
+
+1. *Which weeks should Store 5 increase inventory ahead of demand spikes?*
+2. *Did promotions lift sales meaningfully for Type B stores?*
+3. *Which store type has the strongest average weekly sales?*
+4. *Are there anomalous weeks in Store 12's history worth investigating?*
+5. *How does Store 3's 12-week forecast compare to its historical baseline?*
 
 ---
 
-## Project Structure
+## Dataset
 
-```
-RetailSense/
-├── app.py              ← Main Streamlit app (start here to understand the UI)
-├── data_loader.py      ← ETL: Rossmann CSVs → SQLite
-├── forecaster.py       ← Prophet model + anomaly detection
-├── analyst.py          ← Claude AI narrative layer
-├── requirements.txt
-├── .env.example
-├── .gitignore
-└── data/               ← Add train.csv + store.csv here (git-ignored)
-```
+This project uses the **Rossmann Store Sales** dataset published on Kaggle.
 
-**Files to read first:**
-1. `forecaster.py` — core forecasting logic
-2. `analyst.py` — AI integration with graceful fallback
-3. `app.py` — how it all connects in the UI
+- 1,115 stores across Germany
+- ~2.5 years of daily sales history
+- This project filters to stores 1–20 for manageability
+
+> Due to Kaggle's terms of use, the raw data files are not included in this repository. Download from [kaggle.com/c/rossmann-store-sales](https://www.kaggle.com/c/rossmann-store-sales/data). The app ships with synthetic demo data so it runs immediately without a Kaggle account.
 
 ---
 
 ## Author
 
-Built as a portfolio project demonstrating AI-powered analytics with real retail data.
+**Hamsavi Krishnan**
 
-- **LinkedIn:** [Add your LinkedIn URL]
-- **GitHub:** [Add your GitHub URL]
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/YOUR_LINKEDIN)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/krishnanhamsavi)
 
 ---
 
-*This project was built as a portfolio demonstration of combining classical time series forecasting (Prophet) with modern LLM-powered analysis (Claude AI) in a production-style Streamlit application.*
+## Acknowledgements
+
+- [Rossmann Store Sales — Kaggle](https://www.kaggle.com/c/rossmann-store-sales) for the dataset
+- [Facebook Prophet](https://facebook.github.io/prophet/) for the forecasting library
+- [Anthropic Claude](https://anthropic.com) for the AI API
+- [Streamlit](https://streamlit.io) for the web framework
+
+---
+
+<div align="center">
+  <sub>Built as a portfolio project demonstrating AI-powered analytics with real retail data.</sub>
+</div>
