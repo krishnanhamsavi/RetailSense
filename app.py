@@ -43,12 +43,19 @@ def _db_ready() -> bool:
 
 
 if not _db_ready():
-    st.error(
-        "**Database not found.**\n\n"
-        "Please place `train.csv` and `store.csv` inside the `/data` folder, then run:\n\n"
-        "```\npython data_loader.py\n```"
-    )
-    st.stop()
+    # On Streamlit Cloud: auto-build from demo_data/ if available
+    try:
+        import data_loader
+        with st.spinner("Building database from demo data..."):
+            data_loader.load_rossmann_data()
+    except Exception as exc:
+        st.error(
+            "**Database not found.**\n\n"
+            "Place `train.csv` and `store.csv` in `/data` then run:\n\n"
+            "```\npython data_loader.py\n```\n\n"
+            f"Error: {exc}"
+        )
+        st.stop()
 
 # ---------------------------------------------------------------------------
 # Lazy imports (prophet is slow)

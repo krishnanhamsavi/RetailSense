@@ -8,9 +8,24 @@ import os
 import sqlite3
 import pandas as pd
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
-DB_PATH = os.path.join(os.path.dirname(__file__), "retail.db")
+DATA_DIR      = os.path.join(os.path.dirname(__file__), "data")
+DEMO_DATA_DIR = os.path.join(os.path.dirname(__file__), "demo_data")
+DB_PATH       = os.path.join(os.path.dirname(__file__), "retail.db")
 STORES_TO_LOAD = list(range(1, 21))  # Stores 1–20
+
+
+def _resolve_data_dir() -> tuple[str, bool]:
+    """Return (data_dir, is_demo). Falls back to demo_data/ if real data absent."""
+    train_real = os.path.join(DATA_DIR, "train.csv")
+    train_demo = os.path.join(DEMO_DATA_DIR, "train.csv")
+    if os.path.exists(train_real):
+        return DATA_DIR, False
+    if os.path.exists(train_demo):
+        return DEMO_DATA_DIR, True
+    raise FileNotFoundError(
+        "No data found. Place train.csv and store.csv in /data (real) "
+        "or /demo_data (synthetic), then run: python data_loader.py"
+    )
 
 
 def db_has_data() -> bool:
@@ -30,15 +45,12 @@ def load_rossmann_data() -> None:
         print("Database already exists, skipping load.")
         return
 
-    train_path = os.path.join(DATA_DIR, "train.csv")
-    store_path = os.path.join(DATA_DIR, "store.csv")
+    data_dir, is_demo = _resolve_data_dir()
+    train_path = os.path.join(data_dir, "train.csv")
+    store_path = os.path.join(data_dir, "store.csv")
 
-    if not os.path.exists(train_path) or not os.path.exists(store_path):
-        raise FileNotFoundError(
-            "Missing data files. Place train.csv and store.csv inside the /data folder.\n"
-            "Download from: https://www.kaggle.com/c/rossmann-store-sales/data"
-        )
-
+    if is_demo:
+        print("Using synthetic demo data (no real Kaggle data found).")
     print("Loading train.csv ...")
     train = pd.read_csv(train_path, parse_dates=["Date"], low_memory=False)
 
