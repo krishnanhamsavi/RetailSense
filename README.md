@@ -10,7 +10,7 @@
 [![Claude AI](https://img.shields.io/badge/Claude_AI-Anthropic-8B5CF6?style=for-the-badge)](https://anthropic.com)
 [![License](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge)](LICENSE)
 
-**[🚀 Live Demo](https://retailsense-kkjkdpqxwnmc98smxrfcol.streamlit.app)** · **[Report Bug](https://github.com/krishnanhamsavi/RetailSense/issues)** · **[Request Feature](https://github.com/krishnanhamsavi/RetailSense/issues)**
+**[ Live Demo](https://retailsense-kkjkdpqxwnmc98smxrfcol.streamlit.app)** · **[Report Bug](https://github.com/krishnanhamsavi/RetailSense/issues)** · **[Request Feature](https://github.com/krishnanhamsavi/RetailSense/issues)**
 
 </div>
 
@@ -164,19 +164,7 @@ Open **http://localhost:8501** in your browser.
 
 ---
 
-## Free Mode vs AI Mode
 
-| Feature | Free Mode | AI Mode |
-|---|:---:|:---:|
-| Prophet forecasting | ✅ | ✅ |
-| Interactive Plotly charts | ✅ | ✅ |
-| Anomaly detection | ✅ | ✅ |
-| Store comparison table | ✅ | ✅ |
-| AI forecast narrative | ❌ | ✅ |
-| AI anomaly explanations | ❌ | ✅ |
-| AI store comparison summary | ❌ | ✅ |
-
-Free mode is fully functional. Add an `ANTHROPIC_API_KEY` to unlock the analyst layer.
 
 ---
 
